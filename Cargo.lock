@@ -60,6 +60,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a26ae43d7bcc3b814de94796a5e736d4029efb0ee900c12e2d54c993ad1a1e07"
 
 [[package]]
+name = "hyprkill"
+version = "0.1.0"
+dependencies = [
+ "serde_json",
+ "sysinfo",
+]
+
+[[package]]
 name = "itoa"
 version = "1.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -207,14 +215,6 @@ name = "unicode-ident"
 version = "1.0.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3354b9ac3fae1ff6755cb6db53683adb661634f67557942dea4facebec0fee4b"
-
-[[package]]
-name = "waykill"
-version = "0.1.0"
-dependencies = [
- "serde_json",
- "sysinfo",
-]
 
 [[package]]
 name = "winapi"

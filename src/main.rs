@@ -74,28 +74,34 @@ fn hyprctl_parser(hmap: &mut HashMap<String, Option<usize>>) -> Result<(), Error
         let parsed_json = cmd_out_json_parser(output.stdout);
         if let Ok(json_objects) = parsed_json {
             for i in 0..json_objects.as_array().unwrap().len() {
-                let pid: usize = usize::from_str_radix(
+                // println!("{:?}", json_objects[i]);
+                let pid = usize::from_str_radix(
                     json_objects[i].get("pid").unwrap().to_string().as_str(),
                     10,
-                )
-                .unwrap();
-                let title = json_objects[i]
-                    .get("title")
-                    .unwrap()
-                    .to_string()
-                    .strip_prefix("\"")
-                    .unwrap()
-                    .strip_suffix("\"")
-                    .unwrap()
-                    .to_string();
-                if hmap.contains_key(&title) {
-                    hmap.insert(title, {
-                        if pid == 0 {
-                            None
-                        } else {
-                            Some(pid)
-                        }
-                    });
+                );
+                if pid.as_ref().is_ok() {
+                    let pid = pid.unwrap();
+                    let title = json_objects[i]
+                        .get("title")
+                        .unwrap()
+                        .to_string()
+                        .strip_prefix("\"")
+                        .unwrap()
+                        .strip_suffix("\"")
+                        .unwrap()
+                        .to_string();
+                    // println!("{}", title);
+                    if hmap.contains_key(&title) {
+                        hmap.insert(title, {
+                            if pid == 0 {
+                                None
+                            } else {
+                                Some(pid)
+                            }
+                        });
+                    }
+                } else {
+                    // println!("Empty PID")
                 }
             }
         } else {
@@ -109,6 +115,7 @@ fn hyprctl_parser(hmap: &mut HashMap<String, Option<usize>>) -> Result<(), Error
 
 fn process_killer(inputs: &HashMap<String, Option<usize>>) {
     for i in inputs {
+        // println!("i: {:?}", i);
         match i.1 {
             None => println!("\nUnknown window title: {}", i.0),
             Some(x) => {
